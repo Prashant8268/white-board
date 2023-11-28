@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import { Stage, Layer, Line, Circle, Text, Rect, Arrow } from "react-konva";
 import { BiText, BiRectangle, BiBrush } from "react-icons/bi";
 import ImageUpload from "./imageUpload";
+import { FaStickyNote } from 'react-icons/fa';
 
 import {
   BsPencil,
@@ -39,7 +40,7 @@ const DrawingArea = () => {
   const stageRef = useRef(null);
   // hooks for stroing different tools in the array
   const [draw, setDraw] = useState([]);
-  const [shape, setShape] = useState("Rectangle");
+  const [selectedShape, setSelectedShape] = useState("square");
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [selectedTextIndex, setSelectedTextIndex] = useState(null);
 
@@ -574,23 +575,52 @@ const DrawingArea = () => {
   const handleInputChange = (event) => {
     setInputText(event.target.value);
   };
+  const [addingNote, setAddingNote] = useState(false);
 
-  const handleAddNote = (w, h, shape) => {
+  const handleBoardClick =(event) =>{
+    if(!addingNote){
+      return ;
+    } 
+    console.log('shapte', selectedShape)
+      const x = event.evt.offsetX;
+      const y = event.evt.offsetY;
     setNotes([
       ...notes,
       {
-        x: 100,
-        y: 100,
-        width: w,
-        height: h,
-        shape: shape,
+        x: x,
+        y: y,
+        width: 150,
+        height: 150,
+        shape: selectedShape,
         text: inputText,
         draggable: true,
         color: selectedColor,
       },
     ]);
+    setAddingNote(false); 
+    setInputText("");
+
+    
+  }
+
+  const handleAddNote = (w, h, shape) => {
+    setAddingNote(true); 
+    // setNotes([
+    //   ...notes,
+    //   {
+    //     x: 100,
+    //     y: 100,
+    //     width: w,
+    //     height: h,
+    //     shape: shape,
+    //     text: inputText,
+    //     draggable: true,
+    //     color: selectedColor,
+    //   },
+    // ]);
     setInputText("");
   };
+ 
   // edit the sticy notes function
   const handleNoteChange = (index, newText) => {
     const updatedNotes = [...notes];
@@ -602,9 +632,9 @@ const DrawingArea = () => {
     const updatedNotes = [...notes];
     updatedNotes.splice(index, 1);
     setNotes(updatedNotes);
-    // const del=notes[index]
-    // const res=notes.filter((item)=>item!==del)
-    // setNotes(res)
+    const del=notes[index]
+    const res=notes.filter((item)=>item!==del)
+    setNotes(res)
   };
 
   return (
@@ -671,11 +701,15 @@ const DrawingArea = () => {
                 overlay={CustomStickyPopover({
                   setSelectedColor,
                   handleAddNote,
+                  setAddingNote,
+                  setSelectedShape,
+                  selectedShape
+            
                 })}
                 rootClose={true}
               >
                 <div
-                  // onClick={() => handleAddNote(200, 300,shape)}
+                  onClick={() => handleAddNote(200, 300,selectedShape)}
                   style={{ padding: "12px" }}
                 >
                   <BsStickyFill />
@@ -769,6 +803,7 @@ const DrawingArea = () => {
           </div>
           {/* code for drawing boards */}
           <Stage
+            onClick={(event)=>handleBoardClick(event)}
             width={window.innerWidth}
             height={window.innerHeight}
             onMouseDown={handleMouseDown}
@@ -778,7 +813,9 @@ const DrawingArea = () => {
             ref={stageRef}
             scaleX={scale}
             scaleY={scale}
-            style={{ background: "white" }}
+            style={{ background: "white" ,
+            cursor: addingNote ? 'url("https://cdn-icons-png.flaticon.com/512/684/684930.png"), pointer' : 'auto' 
+          }}
           >
             <Layer>
               {arrows.map((arrow) => (

@@ -3,10 +3,9 @@ import { Popover } from 'react-bootstrap';
 import { BsCCircle, BsSquare, BsStickiesFill } from 'react-icons/bs';
 import { DrawingColors } from "../../utils/DrawingColor";
 
-const CustomStickyPopover = ({ setSelectedColor, handleAddNote }) => {
+const CustomStickyPopover = ({ setSelectedColor, handleAddNote,setAddingNote ,setSelectedShape,selectedShape }) => {
 
-  const [selectedShape, setSelectedShape] = useState(null);
-
+  // const [selectedShape, setSelectedShape] = useState('square');
   return (
     <Popover id="popover-basic">
       <Popover.Body>
@@ -14,7 +13,11 @@ const CustomStickyPopover = ({ setSelectedColor, handleAddNote }) => {
           {DrawingColors.map((color) => (
             <div
               key={color.color}
-              onClick={() => setSelectedColor(color.color)}
+              onClick={() => {
+                setSelectedColor(color.color);
+                setAddingNote(true); 
+              }
+              }
               style={{
                 backgroundColor: color.color,
                 borderRadius: '50%',
@@ -48,7 +51,7 @@ const CustomStickyPopover = ({ setSelectedColor, handleAddNote }) => {
           </div>
           <div
             onClick={() => {
-              handleAddNote(200, 200, 'circle');
+              // handleAddNote(200, 200, 'circle');
               setSelectedShape('circle');
             }}
             style={{
@@ -65,7 +68,7 @@ const CustomStickyPopover = ({ setSelectedColor, handleAddNote }) => {
           </div>
           <div
             onClick={() => {
-              handleAddNote(200, 200, 'square');
+              // handleAddNote(200, 200, 'square');
               setSelectedShape('square');
             }}
             style={{
