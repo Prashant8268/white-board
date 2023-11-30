@@ -581,7 +581,6 @@ const DrawingArea = () => {
     if(!addingNote){
       return ;
     } 
-    console.log('shapte', selectedShape)
       const x = event.evt.offsetX;
       const y = event.evt.offsetY;
     setNotes([
@@ -605,19 +604,6 @@ const DrawingArea = () => {
 
   const handleAddNote = (w, h, shape) => {
     setAddingNote(true); 
-    // setNotes([
-    //   ...notes,
-    //   {
-    //     x: 100,
-    //     y: 100,
-    //     width: w,
-    //     height: h,
-    //     shape: shape,
-    //     text: inputText,
-    //     draggable: true,
-    //     color: selectedColor,
-    //   },
-    // ]);
     setInputText("");
   };
  
